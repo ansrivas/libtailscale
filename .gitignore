@@ -24,3 +24,4 @@ libtailscale_ios.h
 
 /vendor/
 /rust/target
+/target
