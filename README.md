@@ -1,16 +1,22 @@
-# libtailscale
+# tsnet - bindings for libtailscale.
 
 libtailscale is a C library that embeds Tailscale into a process.
+tsnet is a Rust crate wrapping libtailscale and exposing a Rust-y API on top.
 
 Use this library to compile Tailscale into your program and get
 an IP address on a tailnet, entirely from userspace.
 
-## Building
+## Requirements
 
-With the latest version of Go, run:
+* Rust compiler & Cargo
+* Go v1.20 or higher
 
-```
-go build -buildmode=c-archive
+## Getting started
+
+After running `cargo init` add the following lines to your `Cargo.toml` file:
+
+```toml
+tsnet = "0.1.0"
 ```
 
 or 
@@ -21,11 +27,25 @@ make archive
 
 This will produce a `libtailscale.a` file. Link it into your binary,
 and use the `tailscale.h` header to reference it.
+## Development
 
-It is also possible to build a shared library using
+Build with
 
 ```
-go build -buildmode=c-shared
+cargo build
+```
+
+Run tests with
+
+```
+cargo test
+```
+
+Run the examples with
+
+```
+cargo run --example echo_server
+cargo run --example echo_client
 ```
 
 or
@@ -37,7 +57,7 @@ make shared
 ## Bugs
 
 Please file any issues about this code or the hosted service on
-[the issue tracker](https://github.com/tailscale/tailscale/issues).
+[the issue tracker](https://github.com/badboy/tailscale/issues).
 
 ## License
 
