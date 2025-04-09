@@ -65,6 +65,9 @@ use std::{
     path::PathBuf,
     thread,
 };
+
+ 
+
 #[cfg(feature = "tokio")]
 use std::{
     future::Future,
@@ -74,6 +77,7 @@ use std::{
 
 #[cfg(feature = "tokio")]
 use hyper::server::accept::Accept;
+
 #[cfg(feature = "tokio")]
 use tokio::{net, task};
 
@@ -201,6 +205,7 @@ impl Server {
     }
 
     #[cfg(feature = "tokio")]
+    /// Listen asynchronously on the given address and network for new connections
     pub fn listen_async(&self, network: Network, address: &str) -> Result<AsyncListener, Error> {
         let ls = self.listen(network, address)?;
         Ok(AsyncListener {
@@ -444,13 +449,13 @@ impl Listener {
     }
 }
 
-impl Drop for Listener {
-    fn drop(&mut self) {
-        unsafe {
-            sys::tailscale_listener_close(self.handle);
-        }
-    }
-}
+// impl Drop for Listener {
+//     fn drop(&mut self) {
+//         unsafe {
+//             sys::tailscale_listener_close(self.handle);
+//         }
+//     }
+// }
 
 impl Iterator for Listener {
     type Item = Result<TcpStream>;
@@ -467,6 +472,8 @@ impl Iterator for &Listener {
 }
 
 #[cfg(feature = "tokio")]
+/// Accept a new incoming connection from this listener asynchronously.
+///
 pub struct AsyncListener {
     listener: Listener,
     fut: Option<task::JoinHandle<Result<net::TcpStream>>>,
