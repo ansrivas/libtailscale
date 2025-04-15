@@ -34,7 +34,7 @@ path = "rust/examples/echo_server.rs"
 [dependencies]
 hyper = { version = "0.14.19", optional = true, features = ["server"] }
 log = { version = "0.4", default-features = false }
-nix = "0.26.2"
+nix = "0.29"
 thiserror = "2"
 tokio = { version = "1.44.2", optional = true, features = ["rt", "net"] }
 

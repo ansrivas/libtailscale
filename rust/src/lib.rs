@@ -61,7 +61,7 @@ use std::{
     fs::File,
     io::Read,
     net::TcpStream,
-    os::fd::FromRawFd,
+    os::fd::{FromRawFd, IntoRawFd},
     path::PathBuf,
     thread,
 };
@@ -323,7 +323,7 @@ impl ServerBuilder {
                     .name("libtailscale-logwriter".to_string())
                     .spawn(move || {
                         let mut buf = [0; 2048];
-                        let mut file = unsafe { File::from_raw_fd(rx) };
+                        let mut file = unsafe { File::from_raw_fd(rx.into_raw_fd()) };
                         loop {
                             match file.read(&mut buf) {
                                 Ok(0) => break,
@@ -338,7 +338,7 @@ impl ServerBuilder {
                             }
                         }
                     });
-                unsafe { err(result.handle, sys::tailscale_set_logfd(result.handle, wx))? }
+                unsafe { err(result.handle, sys::tailscale_set_logfd(result.handle, wx.into_raw_fd()))? }
             }
             2 => unsafe { err(result.handle, sys::tailscale_set_logfd(result.handle, -1))? },
             _ => {}
